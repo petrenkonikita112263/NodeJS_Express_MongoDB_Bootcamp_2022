@@ -58,20 +58,24 @@ const data = fsModule.readFileSync(".\\dev-data\\data.json", "utf-8")
 const dataObject = JSON.parse(data)
 
 const createdServer = httpModule.createServer((request, response) => {
-    const pathName = request.url
-    if (pathName === "/" || pathName === "/overview") {
+    const { query, pathname } = urlModule.parse(request.url, true)
+    if (pathname === "/" || pathname === "/overview") {
         response.writeHead(200, {
             "Content-type": "text/html",
         })
         const cardsHtml = dataObject
             .map((element) => replaceTemplate(templateCard, element))
             .join("")
-        console.log(cardsHtml)
         const output = templateOverview.replace("{%PRODUCT_CARDS%}", cardsHtml)
         response.end(output)
-    } else if (pathName === "/product") {
-        response.end("This is the PRODUCT page")
-    } else if (pathName === "/API") {
+    } else if (pathname === "/product") {
+        const product = dataObject[query.id]
+        response.writeHead(200, {
+            "Content-type": "text/html",
+        })
+        const output = replaceTemplate(templateProduct, product)
+        response.end(output)
+    } else if (pathname === "/API") {
         response.writeHead(200, {
             "Content-type": "application/json",
         })
