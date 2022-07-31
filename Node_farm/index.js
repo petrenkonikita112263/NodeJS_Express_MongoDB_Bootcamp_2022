@@ -1,6 +1,7 @@
 const fsModule = require("fs")
 const httpModule = require("http")
 const urlModule = require("url")
+const slugifyModule = require("slugify")
 const replaceTemplate = require("./modules/utils")
 
 // Synch approach
@@ -44,6 +45,11 @@ const templateProduct = fsModule.readFileSync(
 )
 const data = fsModule.readFileSync(".\\dev-data\\data.json", "utf-8")
 const dataObject = JSON.parse(data)
+
+const slugs = dataObject.map((element) => {
+    slugifyModule(element.productName, { lower: true })
+})
+console.log(slugs)
 
 const createdServer = httpModule.createServer((request, response) => {
     const { query, pathname } = urlModule.parse(request.url, true)
