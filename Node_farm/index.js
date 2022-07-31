@@ -28,21 +28,54 @@ const urlModule = require("url")
 // console.log("The file was read")
 
 // Server
+const replaceTemplate = (template, product) => {
+    let output = template.replace(/{%PRODUCTNAME%}/g, product.productName)
+    output = output.replace(/{%IMAGE%}/g, product.image)
+    output = output.replace(/{%PRICE%}/g, product.price)
+    output = output.replace(/{%FROM%}/g, product.from)
+    output = output.replace(/{%NUTRIENTS%}/g, product.nutrients)
+    output = output.replace(/{%QUANTITY%}/g, product.quantity)
+    output = output.replace(/{%DESCRIPTION%}/g, product.description)
+    output = output.replace(/{%ID%}/g, product.id)
+    if (!product.organic)
+        output = output.replace(/{%NOT_ORGANIC%}/g, "not-organic")
+    return output
+}
+
+const templateOverview = fsModule.readFileSync(
+    ".\\templates\\template_overview.html",
+    "utf-8"
+)
+const templateCard = fsModule.readFileSync(
+    ".\\templates\\template_card.html",
+    "utf-8"
+)
+const templateProduct = fsModule.readFileSync(
+    ".\\templates\\template_product.html",
+    "utf-8"
+)
+const data = fsModule.readFileSync(".\\dev-data\\data.json", "utf-8")
+const dataObject = JSON.parse(data)
+
 const createdServer = httpModule.createServer((request, response) => {
     const pathName = request.url
     if (pathName === "/" || pathName === "/overview") {
-        response.end("This is the OVERWIE page")
+        response.writeHead(200, {
+            "Content-type": "text/html",
+        })
+        const cardsHtml = dataObject
+            .map((element) => replaceTemplate(templateCard, element))
+            .join("")
+        console.log(cardsHtml)
+        const output = templateOverview.replace("{%PRODUCT_CARDS%}", cardsHtml)
+        response.end(output)
     } else if (pathName === "/product") {
         response.end("This is the PRODUCT page")
     } else if (pathName === "/API") {
-        fsModule.readFile(".\\dev-data\\data.json", "utf-8", (error, data) => {
-            const productData = JSON.parse(data)
-            console.log(productData)
-            response.writeHead(200, {
-                "Content-type": "application/json",
-            })
-            response.end(data)
+        response.writeHead(200, {
+            "Content-type": "application/json",
         })
+        response.end(data)
     } else {
         response.writeHead(404, {
             "Content-type": "text/html",
