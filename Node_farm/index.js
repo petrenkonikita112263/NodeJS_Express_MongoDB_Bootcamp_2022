@@ -34,6 +34,15 @@ const createdServer = httpModule.createServer((request, response) => {
         response.end("This is the OVERWIE page")
     } else if (pathName === "/product") {
         response.end("This is the PRODUCT page")
+    } else if (pathName === "/API") {
+        fsModule.readFile(".\\dev-data\\data.json", "utf-8", (error, data) => {
+            const productData = JSON.parse(data)
+            console.log(productData)
+            response.writeHead(200, {
+                "Content-type": "application/json",
+            })
+            response.end(data)
+        })
     } else {
         response.writeHead(404, {
             "Content-type": "text/html",
