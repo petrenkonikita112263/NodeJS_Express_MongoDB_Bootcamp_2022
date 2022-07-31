@@ -1,5 +1,6 @@
 const fsModule = require("fs")
 const httpModule = require("http")
+const urlModule = require("url")
 
 // Synch approach
 // const inputText = fsModule.readFileSync(".\\txt\\input.txt", "utf-8")
@@ -28,8 +29,17 @@ const httpModule = require("http")
 
 // Server
 const createdServer = httpModule.createServer((request, response) => {
-    console.log(request)
-    response.end("Hello from the server!")
+    const pathName = request.url
+    if (pathName === "/" || pathName === "/overview") {
+        response.end("This is the OVERWIE page")
+    } else if (pathName === "/product") {
+        response.end("This is the PRODUCT page")
+    } else {
+        response.writeHead(404, {
+            "Content-type": "text/html",
+        })
+        response.end("<h1>Page was not found</h1>")
+    }
 })
 createdServer.listen(8000, "localhost", () => {
     console.log("Listening to request on port 8000")
