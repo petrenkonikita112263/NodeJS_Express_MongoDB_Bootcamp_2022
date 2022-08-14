@@ -1,5 +1,6 @@
 const express = require("express")
 const morgan = require("morgan")
+const mongoose = require("mongoose")
 const port = 2348
 
 // express app
@@ -8,9 +9,13 @@ const app = express()
 // conntect to MongoDB
 const dbURI =
     "mongodb+srv://editor_blog:8Wgp9Dk4yCDVtjZi@cluster0.qmao9io.mongodb.net/?retryWrites=true&w=majority"
-
-// listen for requests
-app.listen(port)
+mongoose
+    .connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then((result) => {
+        // listen for requests
+        app.listen(port)
+    })
+    .catch((error) => console.log(error))
 
 // register view engine
 app.set("view engine", "ejs")
