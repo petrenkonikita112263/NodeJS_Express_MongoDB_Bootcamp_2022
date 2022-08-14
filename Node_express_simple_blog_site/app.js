@@ -31,7 +31,7 @@ app.get("/about", (request, response) => {
     response.render("about", { title: "About" })
 })
 
-app.get("blogs/create", (request, response) => {
+app.get("/blogs/create", (request, response) => {
     response.render("create", { title: "Create a new blog" })
 })
 
