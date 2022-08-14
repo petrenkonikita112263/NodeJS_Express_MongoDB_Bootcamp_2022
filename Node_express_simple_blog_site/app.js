@@ -10,19 +10,32 @@ app.set("view engine", "ejs")
 // listen for requests
 app.listen(port)
 app.get("/", (request, response) => {
-    response.sendFile("./views/index.html", { root: __dirname })
+    const blogs = [
+        {
+            title: "Yoshi finds eggs",
+            snippet: "Lorem ipsum dolor sit amet consectetur",
+        },
+        {
+            title: "Mario finds stars",
+            snippet: "Lorem ipsum dolor sit amet consectetur",
+        },
+        {
+            title: "How to defeat bowser",
+            snippet: "Lorem ipsum dolor sit amet consectetur",
+        },
+    ]
+    response.render("index", { title: "Home", blogs })
 })
 
 app.get("/about", (request, response) => {
-    response.sendFile("./views/about.html", { root: __dirname })
+    response.render("about", { title: "About" })
 })
 
-// redirects
-app.get("/about-us", (request, response) => {
-    response.redirect("/about")
+app.get("blogs/create", (request, response) => {
+    response.render("create", { title: "Create a new blog" })
 })
 
 // error page
 app.use((request, response) => {
-    response.sendFile("./views/404.html", { root: __dirname })
+    response.status(404).render("404", { title: "404 page" })
 })
