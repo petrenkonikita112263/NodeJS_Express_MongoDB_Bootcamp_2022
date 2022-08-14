@@ -1,8 +1,12 @@
 const express = require("express")
+const morgan = require("morgan")
 const port = 2348
 
 // express app
 const app = express()
+
+// listen for requests
+app.listen(port)
 
 // register view engine
 app.set("view engine", "ejs")
@@ -10,8 +14,28 @@ app.set("view engine", "ejs")
 // static files
 app.use(express.static("public"))
 
-// listen for requests
-app.listen(port)
+// middleware
+app.use((request, response, next) => {
+    console.log("new request made:")
+    console.log(`host: ${request.hostname}`)
+    console.log(`path: ${request.path}`)
+    console.log(`method: ${request.method}`)
+    next()
+})
+
+app.use((request, response, next) => {
+    console.log("in the next middleware")
+    next()
+})
+
+app.use(morgan("dev"))
+
+app.use((request, response, next) => {
+    response.locals.path = request.path
+    next()
+})
+
+// routes
 app.get("/", (request, response) => {
     const blogs = [
         {
