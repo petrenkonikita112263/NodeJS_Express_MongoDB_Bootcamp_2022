@@ -5,6 +5,10 @@ const port = 2348
 // express app
 const app = express()
 
+// conntect to MongoDB
+const dbURI =
+    "mongodb+srv://editor_blog:8Wgp9Dk4yCDVtjZi@cluster0.qmao9io.mongodb.net/?retryWrites=true&w=majority"
+
 // listen for requests
 app.listen(port)
 
