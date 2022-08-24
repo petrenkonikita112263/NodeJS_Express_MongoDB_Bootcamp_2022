@@ -18,6 +18,22 @@ app.get("/api/v1/tours", (request, response) => {
     })
 })
 
+app.get("/api/v1/tours/:id", (request, response) => {
+    const id = request.params.id * 1
+    const tour = tours.find((element) => element.id === id)
+    if (!tour) {
+        return response
+            .status(404)
+            .json({ status: "failed", message: "Invalid ID" })
+    }
+    response.json({
+        status: "success",
+        data: {
+            tour: tour,
+        },
+    })
+})
+
 app.post("/api/v1/tours", (request, response) => {
     const newId = tours[tours.length - 1].id + 1
     const newTour = Object.assign(
