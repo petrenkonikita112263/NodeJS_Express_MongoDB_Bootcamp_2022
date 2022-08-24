@@ -1,14 +1,19 @@
 const express = require("express")
 const app = express()
 const port = 2347
+const fs = require("fs")
+const tours = JSON.parse(
+    fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
+)
 
-app.get("/", (resquest, response) => {
-    response.status(200)
-    response.json({ message: "Hello from the server side!", app: "Natours" })
-})
-
-app.post("/", (request, response) => {
-    response.send("You can post to this endpoint ...")
+app.get("/api/v1/tours", (request, response) => {
+    response.json({
+        status: "success",
+        results: tours.length,
+        data: {
+            tours: tours,
+        },
+    })
 })
 
 app.listen(port, () => {
