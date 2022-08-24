@@ -8,7 +8,7 @@ const tours = JSON.parse(
 
 app.use(express.json())
 
-app.get("/api/v1/tours", (request, response) => {
+const getAllTours = (request, response) => {
     response.json({
         status: "success",
         results: tours.length,
@@ -16,9 +16,9 @@ app.get("/api/v1/tours", (request, response) => {
             tours: tours,
         },
     })
-})
+}
 
-app.get("/api/v1/tours/:id", (request, response) => {
+const getTour = (request, response) => {
     const id = request.params.id * 1
     const tour = tours.find((element) => element.id === id)
     if (!tour) {
@@ -32,9 +32,9 @@ app.get("/api/v1/tours/:id", (request, response) => {
             tour: tour,
         },
     })
-})
+}
 
-app.post("/api/v1/tours", (request, response) => {
+const createTour = (request, response) => {
     const newId = tours[tours.length - 1].id + 1
     const newTour = Object.assign(
         {
@@ -55,9 +55,9 @@ app.post("/api/v1/tours", (request, response) => {
             })
         }
     )
-})
+}
 
-app.patch("/api/v1/tours/:id", (request, response) => {
+const updateTour = (request, response) => {
     if (request.params.id * 1 > tours.length) {
         return response
             .status(404)
@@ -67,7 +67,21 @@ app.patch("/api/v1/tours/:id", (request, response) => {
         status: "success",
         data: { tour: "Updated tour ..." },
     })
-})
+}
+
+const deleteTour = (request, response) => {
+    if (request.params.id * 1 > tours.length) {
+        return response
+            .status(404)
+            .json({ status: "failed", message: "Invalid ID" })
+    }
+    response.status(204).json({
+        status: "success",
+        data: { tour: "Deleted tour ..." },
+    })
+}
+app.route("/api/v1/tours").get(getAllTours).post(createTour)
+app.route("/api/v1/tours/:id").get(getTour).patch(updateTour).delete(deleteTour)
 
 app.listen(port, () => {
     console.log(`App running on port ... ${port} ... `)
