@@ -97,9 +97,41 @@ const deleteTour = (request, response) => {
     })
 }
 
+const getAllUsers = (request, response) => {
+    response
+        .status(500)
+        .json({ status: "error", message: "This route is not yet implemented" })
+}
+
+const createUser = (request, response) => {
+    response
+        .status(500)
+        .json({ status: "error", message: "This route is not yet implemented" })
+}
+
+const getUser = (request, response) => {
+    response
+        .status(500)
+        .json({ status: "error", message: "This route is not yet implemented" })
+}
+
+const updateUser = (request, response) => {
+    response
+        .status(500)
+        .json({ status: "error", message: "This route is not yet implemented" })
+}
+
+const deleteUser = (request, response) => {
+    response
+        .status(500)
+        .json({ status: "error", message: "This route is not yet implemented" })
+}
+
 // 4) Routes
 app.route("/api/v1/tours").get(getAllTours).post(createTour)
 app.route("/api/v1/tours/:id").get(getTour).patch(updateTour).delete(deleteTour)
+app.route("/api/v1/users").get(getAllUsers).post(createUser)
+app.route("/api/v1/users/:id").get(getUser).patch(updateUser).delete(deleteUser)
 
 // 5) Start service
 app.listen(port, () => {
