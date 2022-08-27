@@ -13,6 +13,16 @@ exports.checkId = (request, response, next, value) => {
     next()
 }
 
+exports.checkBody = (request, response, next) => {
+    if (!request.body.name || !request.body.price) {
+        return response.status(400).json({
+            status: "failed",
+            message: "Missing name or price parameter",
+        })
+    }
+    next()
+}
+
 exports.getAllTours = (request, response) => {
     console.log(request.requestTime)
     response.json({
