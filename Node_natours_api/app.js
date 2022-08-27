@@ -1,3 +1,4 @@
+// 1) Constants and imports
 const express = require("express")
 const app = express()
 const port = 2347
@@ -5,6 +6,10 @@ const fs = require("fs")
 const tours = JSON.parse(
     fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
 )
+const morgan = require("morgan")
+
+// 2) Middleware
+app.use(morgan("dev"))
 
 app.use(express.json())
 app.use((request, response, next) => {
@@ -17,6 +22,7 @@ app.use((request, response, next) => {
     next()
 })
 
+// 3) Route handlers
 const getAllTours = (request, response) => {
     console.log(request.requestTime)
     response.json({
@@ -90,9 +96,12 @@ const deleteTour = (request, response) => {
         data: { tour: "Deleted tour ..." },
     })
 }
+
+// 4) Routes
 app.route("/api/v1/tours").get(getAllTours).post(createTour)
 app.route("/api/v1/tours/:id").get(getTour).patch(updateTour).delete(deleteTour)
 
+// 5) Start service
 app.listen(port, () => {
     console.log(`App running on port ... ${port} ... `)
 })
