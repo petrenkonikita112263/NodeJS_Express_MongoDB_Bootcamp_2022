@@ -4,11 +4,13 @@
     "description": "Learning Node, Express and MongoDB",
     "main": "app.js",
     "scripts": {
-        "start": "nodemon server"
+        "start": "nodemon server",
+        "start:prod": "NODE_ENV=production nodemon server"
     },
     "author": "Nikita Petrenko",
     "license": "ISC",
     "dependencies": {
+        "dotenv": "^16.0.1",
         "express": "^4.18.1",
         "morgan": "^1.10.0"
     }
