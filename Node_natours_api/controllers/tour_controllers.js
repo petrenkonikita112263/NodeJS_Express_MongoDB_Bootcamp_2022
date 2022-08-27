@@ -4,6 +4,15 @@ const tours = JSON.parse(
 )
 
 // 3) Route handlers
+exports.checkId = (request, response, next, value) => {
+    if (request.params.id * 1 > tours.length) {
+        return response
+            .status(404)
+            .json({ status: "failed", message: "Invalid ID" })
+    }
+    next()
+}
+
 exports.getAllTours = (request, response) => {
     console.log(request.requestTime)
     response.json({
@@ -18,11 +27,6 @@ exports.getAllTours = (request, response) => {
 exports.getTour = (request, response) => {
     const id = request.params.id * 1
     const tour = tours.find((element) => element.id === id)
-    if (!tour) {
-        return response
-            .status(404)
-            .json({ status: "failed", message: "Invalid ID" })
-    }
     response.json({
         status: "success",
         data: {
@@ -55,11 +59,6 @@ exports.createTour = (request, response) => {
 }
 
 exports.updateTour = (request, response) => {
-    if (request.params.id * 1 > tours.length) {
-        return response
-            .status(404)
-            .json({ status: "failed", message: "Invalid ID" })
-    }
     response.json({
         status: "success",
         data: { tour: "Updated tour ..." },
@@ -67,11 +66,6 @@ exports.updateTour = (request, response) => {
 }
 
 exports.deleteTour = (request, response) => {
-    if (request.params.id * 1 > tours.length) {
-        return response
-            .status(404)
-            .json({ status: "failed", message: "Invalid ID" })
-    }
     response.status(204).json({
         status: "success",
         data: { tour: "Deleted tour ..." },
