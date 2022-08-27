@@ -7,8 +7,18 @@ const tours = JSON.parse(
 )
 
 app.use(express.json())
+app.use((request, response, next) => {
+    console.log("Hello from the middleware 👏")
+    next()
+})
+
+app.use((request, response, next) => {
+    request.requestTime = new Date().toISOString()
+    next()
+})
 
 const getAllTours = (request, response) => {
+    console.log(request.requestTime)
     response.json({
         status: "success",
         results: tours.length,
