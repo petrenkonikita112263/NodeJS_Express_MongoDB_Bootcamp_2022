@@ -8,6 +8,7 @@ const morgan = require("morgan")
 // 2) Middleware
 app.use(morgan("dev"))
 app.use(express.json())
+app.use(express.static(`${__dirname}/public`))
 app.use((request, response, next) => {
     request.requestTime = new Date().toISOString()
     next()
