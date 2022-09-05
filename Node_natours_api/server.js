@@ -7,6 +7,16 @@ const dbUrl = process.env.DATABASE.replace(
     "<PASSWORD>",
     process.env.DATABASE_PASSWORD
 )
+const tourSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: [true, "A tour must have the name"],
+        unique: true,
+    },
+    rating: { type: Number, default: 4.5 },
+    price: { type: Number, required: [true, "A tour must have the price"] },
+})
+const Tour = mongoose.model("Tour", tourSchema)
 
 mongoose
     .connect(dbUrl, {
