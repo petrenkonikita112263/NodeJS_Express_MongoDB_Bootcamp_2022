@@ -11,15 +11,15 @@ const Tour = require("./../models/tour_model")
 //     next()
 // }
 
-exports.checkBody = (request, response, next) => {
-    if (!request.body.name || !request.body.price) {
-        return response.status(400).json({
-            status: "failed",
-            message: "Missing name or price parameter",
-        })
-    }
-    next()
-}
+// exports.checkBody = (request, response, next) => {
+//     if (!request.body.name || !request.body.price) {
+//         return response.status(400).json({
+//             status: "failed",
+//             message: "Missing name or price parameter",
+//         })
+//     }
+//     next()
+// }
 
 exports.getAllTours = (request, response) => {
     console.log(request.requestTime)
@@ -43,27 +43,21 @@ exports.getTour = (request, response) => {
     // })
 }
 
-exports.createTour = (request, response) => {
-    // const newId = tours[tours.length - 1].id + 1
-    // const newTour = Object.assign(
-    //     {
-    //         id: newId,
-    //     },
-    //     request.body
-    // )
-    // tours.push(newTour)
-    // fs.writeFile(
-    //     `${__dirname}/dev-data/data/tours-simple.json`,
-    //     JSON.stringify(tours),
-    //     (error) => {
-    //         response.json({
-    //             status: "success",
-    //             data: {
-    //                 tours: tours,
-    //             },
-    //         })
-    //     }
-    // )
+exports.createTour = async (request, response) => {
+    try {
+        const newTour = await Tour.create(request.body)
+        response.status(201).json({
+            status: "success",
+            data: {
+                tours: newTour,
+            },
+        })
+    } catch (error) {
+        response.status(400).json({
+            status: "Failed",
+            message: error,
+        })
+    }
 }
 
 exports.updateTour = (request, response) => {
