@@ -6,7 +6,7 @@ const tourRouter = express.Router()
 
 tourRouter
     .route("/")
-    .get(tourController.getAllTours)
+    .get(tourController.aliasTopTours, tourController.getAllTours)
     .post(tourController.createTour)
 tourRouter
     .route("/:id")

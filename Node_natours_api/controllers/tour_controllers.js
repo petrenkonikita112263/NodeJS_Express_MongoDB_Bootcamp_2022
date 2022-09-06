@@ -1,5 +1,6 @@
 // const fs = require("fs")
 const Tour = require("./../models/tour_model")
+const APIFeatures = require("./../utils/api_features")
 
 // 3) Route handlers
 // exports.checkId = (request, response, next, value) => {
@@ -21,9 +22,21 @@ const Tour = require("./../models/tour_model")
 //     next()
 // }
 
+exports.aliasTopTours = (request, response, next) => {
+    request.query.limit = "5"
+    request.query.sort = "-ratingsAverage,price"
+    request.query.fields = "name,price,ratingsAverage,summary,difficulty"
+    next()
+}
+
 exports.getAllTours = async (request, response) => {
     try {
-        const tours = await Tour.find()
+        const features = new APIFeatures(Tour.find(), request.query)
+            .filter()
+            .sort()
+            .limitFields()
+            .paginate()
+        const tours = await features.query
         response.status(200).json({
             status: "success",
             results: tours.length,
