@@ -1,4 +1,5 @@
 const mongoose = require("mongoose")
+const slugify = require("slugify")
 
 const tourSchema = new mongoose.Schema(
     {
@@ -88,6 +89,12 @@ const tourSchema = new mongoose.Schema(
 
 tourSchema.virtual("durationWeeks").get(function () {
     return this.duration / 7
+})
+
+// Document middlware
+tourSchema.pre("save", function (next) {
+    this.slug = slugify(this.name, { lower: true })
+    next()
 })
 
 const Tour = mongoose.model("Tour", tourSchema)
