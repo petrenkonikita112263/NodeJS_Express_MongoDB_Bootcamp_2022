@@ -3,7 +3,9 @@ const tourController = require("./../controllers/tour_controllers")
 const tourRouter = express.Router()
 
 // tourRouter.param("id", tourController.checkId)
-
+tourRouter
+    .route("/top-5-cheap")
+    .get(tourController.aliasTopTours, tourController.getAllTours)
 tourRouter
     .route("/")
     .get(tourController.aliasTopTours, tourController.getAllTours)
