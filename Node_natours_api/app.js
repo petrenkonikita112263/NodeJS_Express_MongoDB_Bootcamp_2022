@@ -4,6 +4,8 @@ const app = express()
 const tourRouter = require("./routes/tour_routes")
 const userRouter = require("./routes/user_routes")
 const morgan = require("morgan")
+const appError = require("./utils/app_error")
+const globalErrorHandler = require("./controllers/error_controllers")
 
 // 2) Middleware
 if (process.env.NODE_ENV === "development") {
@@ -20,21 +22,8 @@ app.use((request, response, next) => {
 app.use("/api/v1/tours", tourRouter)
 app.use("/api/v1/users", userRouter)
 app.all("*", (request, response) => {
-    // response.status(404).json({
-    //     status: "Failed",
-    //     message: `Can't find ${request.originalUrl} on this server!`,
-    // })
-    const error = new Error(`Can't find ${request.originalUrl} on this server!`)
-    error.status = "Failed"
-    error.statusCode = 404
-    next(error)
+    next(new appError(`Can't find ${request.originalUrl} on this server!`, 404))
 })
-app.use((error, request, response, next) => {
-    error.statusCode = error.statusCode || 500
-    error.status = error.status || "Error"
-    response
-        .status(error.statusCode)
-        .json({ status: error.status, message: error.message })
-})
+app.use(globalErrorHandler)
 
 module.exports = app
