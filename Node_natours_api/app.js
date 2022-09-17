@@ -19,5 +19,11 @@ app.use((request, response, next) => {
 // 3) Routes
 app.use("/api/v1/tours", tourRouter)
 app.use("/api/v1/users", userRouter)
+app.all("*", (request, response) => {
+    response.status(404).json({
+        status: "Failed",
+        message: `Can't find ${request.originalUrl} on this server!`,
+    })
+})
 
 module.exports = app
