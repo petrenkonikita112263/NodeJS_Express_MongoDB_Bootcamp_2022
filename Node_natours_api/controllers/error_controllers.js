@@ -8,12 +8,21 @@ const sendErrorDev = (error, response) => {
 }
 
 const sendErrorProd = (error, response) => {
-    response.status(error.statusCode).json({
-        status: error.status,
-        error: error,
-        message: error.message,
-        stack: error.stack,
-    })
+    // Operational, trusted error
+    if (err.isOperational) {
+        response.status(error.statusCode).json({
+            status: error.status,
+            error: error,
+        })
+    }
+    // Programming or other unknown error
+    else {
+        console.error("ERROR 💥💥💥", error)
+        response.status(500).json({
+            status: "Error",
+            message: "Something went very wrong!",
+        })
+    }
 }
 
 module.exports = (error, request, response, next) => {
