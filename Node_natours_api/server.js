@@ -8,6 +8,12 @@ const dbUrl = process.env.DATABASE.replace(
     process.env.DATABASE_PASSWORD
 )
 
+process.on("uncaughtException", (error) => {
+    console.log("UNCAUGHT EXCEPTION! 💥 Shutting down...")
+    console.log(error.name, error.message)
+    process.exit(1)
+})
+
 mongoose
     .connect(dbUrl, {
         useNewUrlParser: true,
